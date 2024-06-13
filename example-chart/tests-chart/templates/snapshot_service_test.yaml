@@ -1,0 +1,31 @@
+
+{{- /*
+# Helm unit testing
+#
+# TODO: parameterize this as needed by with values from your values.yaml
+# 
+# This folder is sorely lacking.  Please update anything that you change to
+# ensure that we are proving any helm chart functionality that you've added.
+# yaml-language-server: $schema=../helm-testsuite.json
+*/}}
+{{- range $idx, $env := $.Values.envs }}
+suite: service snapshot {{ $env }} test
+snapshotId: {{ $env }}
+templates:
+  - service.yaml
+tests:
+  - it: manifest should match snapshot
+    set:
+      env: {{ $env }}
+    asserts:
+    {{- /*
+      If we have no documents snapshot doesn't handle that well
+    */}}
+    {{- if has "service" $.Values.noDocTemplates }}
+      - hasDocuments:
+        count: 0 
+    {{- else }}
+      - matchSnapshot: {}
+    {{- end }}
+---
+{{- end }}
