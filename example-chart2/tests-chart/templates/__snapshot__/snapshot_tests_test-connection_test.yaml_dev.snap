@@ -1,0 +1,23 @@
+manifest should match snapshot:
+  1: |
+    apiVersion: v1
+    kind: Pod
+    metadata:
+      annotations:
+        helm.sh/hook: test
+      labels:
+        app.kubernetes.io/instance: RELEASE-NAME
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: example-chart2
+        app.kubernetes.io/version: 1.16.0
+        helm.sh/chart: example-chart2-0.1.0
+      name: RELEASE-NAME-example-chart2-test-connection
+    spec:
+      containers:
+        - args:
+            - RELEASE-NAME-example-chart2:80
+          command:
+            - wget
+          image: busybox
+          name: wget
+      restartPolicy: Never
