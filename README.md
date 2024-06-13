@@ -5,6 +5,22 @@ target of this pattern is to be able to enforce snapshots with every helm change
 can be certain of the manifest changes.  The use of snapshots also helps developers to test trickier
 helm syntax by run tests multiple times and reviewing the diff.
 
+- [Helm Testing Template](#helm-testing-template)
+- [Tools:](#tools)
+- [Creating a new helm repo](#creating-a-new-helm-repo)
+  - [Using new-chart.sh](#using-new-chartsh)
+  - [Doing it via manual commands](#doing-it-via-manual-commands)
+  - [End Result](#end-result)
+    - [test.sh](#testsh)
+      - [Updating snapshots](#updating-snapshots)
+    - [tests-chart](#tests-chart)
+  - [Snapshots-template.yaml](#snapshots-templateyaml)
+    - [Default Snapshots-template.yaml](#default-snapshots-templateyaml)
+      - [Environment based document skips](#environment-based-document-skips)
+- [Running all tests](#running-all-tests)
+
+*Created with Markdown All In One VsCode Extension*
+
 # Tools:
 
 1. [Install helm](https://helm.sh/docs/intro/install/)
@@ -37,6 +53,12 @@ The end result of the above commands is a helm chart with a nested helm test cha
 This is the script that sets up calling your unit-tests. It performs some additional abstractions that are hard to police
 via Github PRs.  The main thing that is does is call the standard make-snapshots.sh script to see if there are new files
 that don't have a snapshot test.
+
+#### Updating snapshots
+
+All the test scripts come with a `--update-snapshots` flag that will run tests and update the snapshots (it just triggers this
+on the helm unittest command).  Because of this, when changing charts, you can use this to get snapshots to store new expected
+snapshots.
 
 ### tests-chart
 
@@ -166,3 +188,13 @@ tests:
 
 The above setup will only expect no documents if we added "all" for all environments or the current environment
 has an entry for the yaml name.
+
+# Running all tests
+
+This repository also houses a simple shell script for running all tests within the repo and also throwing an error if a helm chart is setup without tests.
+
+It will equally allow you to run snapshot updates in all folders as well.
+
+```shell
+./bin/helm/test-all-charts.sh --update-snapshots --allow-no-tests
+```
