@@ -138,6 +138,8 @@ noDocTemplates:
 
 #### Environment based document skips
 
+**This is deprecated now with >0.5.0 helm unittest you will want to update your test.sh scripts to ensure that no new snap files are created instead**
+
 More commonly, you might find yourself wanting to say that certain environments are probably missing templates.  This
 could happen because you have a cost cutting measure in some environments over others, or different tooling.  This type of
 thing is up to you to ultimately pattern (and probably add to your `snapshots-template.yaml`), but the following is a naive
@@ -179,7 +181,7 @@ tests:
         count: 0
         {{- end }}
     {{- end }}
-    {{- if not $hasClusterEntry }}
+    {{- if not $noSnapshot }}
       - matchSnapshot: {}
     {{- end }}
 ---
