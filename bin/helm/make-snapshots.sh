@@ -60,15 +60,7 @@ tests:
     set:
       env: {{ \$env }}
     asserts:
-    {{- /*
-      If we have no documents snapshot doesn't handle that well
-    */}}
-    {{- if has \"YAML_NAME\" $.Values.noDocTemplates }}
-      - hasDocuments:
-        count: 0 
-    {{- else }}
       - matchSnapshot: {}
-    {{- end }}
 ---
 {{- end }}
 "
